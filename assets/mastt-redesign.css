@@ -1,0 +1,2534 @@
+/* ==========================================================================
+   MASTT JEWELLERY — VISUAL REDESIGN LAYER
+   ==========================================================================
+   Loaded right after base.css in layout/theme.liquid. Redeclares the same
+   custom property names Dawn/the theme already reads (--kk-*, --buttons-
+   radius, --inputs-radius, etc.) so nothing else needs to change.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. FONTS — Manrope stays Shopify-hosted (settings.type_body_font).
+      Fraunces loads via Google Fonts <link> in layout/theme.liquid <head>.
+   -------------------------------------------------------------------------- */
+
+
+/* --------------------------------------------------------------------------
+   2. DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+
+  /* ---- Brand palette (source of truth — from brand sheet) ---- */
+  --color-pearl-beige:  #F5E7DF;  /* Warm Pearl Beige  */
+  --color-nude-beige:   #E3C4BC;  /* Soft Nude Beige    */
+  --color-blush-pink:   #EC9F93;  /* Signature Blush Pink */
+  --color-dusty-coral:  #D6887C;  /* Dusty Coral (primary accent / CTA) */
+  --color-aqua:         #78AAB1;  /* Soft Aqua Blue (secondary accent) */
+  --color-charcoal:     #201B19;  /* Charcoal Black (text / ink) */
+  --color-white:        #FFFFFF;
+
+  /* ---- Tint/shade ramps, generated from the brand colors so nothing
+     is hand-guessed. color-mix() has >95% global support in 2026 —
+     safe for a Shopify storefront. ---- */
+  --color-coral-10:   color-mix(in srgb, var(--color-dusty-coral) 10%, white);
+  --color-coral-20:   color-mix(in srgb, var(--color-dusty-coral) 20%, white);
+  --color-coral-40:   color-mix(in srgb, var(--color-dusty-coral) 40%, white);
+  --color-coral-dark:  color-mix(in srgb, var(--color-dusty-coral) 80%, var(--color-charcoal));
+
+  --color-aqua-10:    color-mix(in srgb, var(--color-aqua) 10%, white);
+  --color-aqua-20:    color-mix(in srgb, var(--color-aqua) 20%, white);
+  --color-aqua-dark:   color-mix(in srgb, var(--color-aqua) 80%, var(--color-charcoal));
+
+  --color-charcoal-70: color-mix(in srgb, var(--color-charcoal) 70%, white); /* secondary text */
+  --color-charcoal-45: color-mix(in srgb, var(--color-charcoal) 45%, white); /* muted / strike-through */
+  --color-charcoal-15: color-mix(in srgb, var(--color-charcoal) 15%, white); /* hairline borders */
+  --color-charcoal-08: color-mix(in srgb, var(--color-charcoal) 8%,  white); /* faint fills */
+
+  /* ---- Legacy brand token names kept for compatibility with existing
+     base.css / component-card.css rules that already reference them ---- */
+  --kk-white:       var(--color-white);
+  --kk-charcoal:    var(--color-charcoal);
+  --kk-accent:      var(--color-dusty-coral);
+  --kk-accent-alt:  var(--color-aqua);
+  --kk-primary:     var(--color-pearl-beige);
+  --kk-cta-primary:   var(--color-charcoal);   /* button label */
+  --kk-cta-secondary: var(--color-dusty-coral); /* button fill */
+  --kk-br:          var(--radius-sm);
+  --mastt-radius-pill:      var(--radius-md);
+  --mastt-border-hairline:  1px solid var(--color-charcoal-15);
+  --kk__soft__shadow:   var(--shadow-md);
+  --mastt-shadow-lg:          var(--shadow-lg);
+  --kk__cs:             var(--shadow-sm);
+
+  /* ---- Radius scale (replaces the ad hoc 0px / 6px / 20px mix) ---- */
+  --radius-xs:   6px;   /* chips, tags */
+  --radius-sm:   10px;  /* inputs, small buttons */
+  --radius-md:   16px;  /* cards, media, modals */
+  --radius-lg:   24px;  /* hero panels, large feature cards */
+  --radius-full: 999px; /* pill buttons, avatars, circular tiles */
+
+  /* ---- Shadow scale — brand-tinted, low opacity (replaces the old
+     flat 25%-black shadows, which read heavy/generic) ---- */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+  --shadow-md: 0 8px 24px -4px color-mix(in srgb, var(--color-charcoal) 14%, transparent);
+  --shadow-lg: 0 20px 48px -8px color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  --shadow-coral-glow: 0 10px 24px -6px color-mix(in srgb, var(--color-dusty-coral) 45%, transparent);
+
+  /* ---- Spacing scale (rem-based; pairs with the existing fluid
+     --spacer clamp already used for section rhythm) ---- */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-6: 2.4rem;
+  --space-8: 3.2rem;
+  --space-12: 4.8rem;
+  --space-16: 6.4rem;
+  --spacer: clamp(32px, 20px + 3vw, 96px); /* was clamp(20px,14px+1.875vw,50px) — more breathing room between homepage sections */
+
+  /* ---- Typography scale (fluid, ~1.25 ratio) ---- */
+  --text-eyebrow: 500 1.1rem/1.4 var(--font-body-family, 'Manrope', sans-serif);
+  --text-xs:   clamp(1.2rem, 1.15rem + 0.15vw, 1.3rem);
+  --text-sm:   clamp(1.3rem, 1.25rem + 0.2vw,  1.5rem);
+  --text-base: clamp(1.5rem, 1.4rem + 0.3vw,   1.6rem);
+  --text-md:   clamp(1.8rem, 1.6rem + 0.6vw,   2.2rem);
+  --text-lg:   clamp(2.4rem, 2rem + 1.2vw,     3.2rem);
+  --text-xl:   clamp(3.2rem, 2.6rem + 2vw,     4.8rem);
+  --text-2xl:  clamp(4rem, 3rem + 3.5vw,       7.2rem);
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-med: 320ms;
+}
+
+
+/* --------------------------------------------------------------------------
+   2b. COLOUR SCHEMES — enforced from code
+   Dawn builds .color-scheme-N from config/settings_data.json, which the
+   Shopify Theme Editor rewrites every time it saves. That kept reverting the
+   palette to the old store's tan/gold (scheme-1 back to #f5efe6 / #c8a46b),
+   which is why the header and other sections stopped matching the brand.
+   Declaring the schemes here makes the palette code-owned and stable.
+
+   Consequence to know: the Colors panel in Theme Editor no longer changes
+   the site. Ask for a colour change here instead.
+   -------------------------------------------------------------------------- */
+.color-scheme-1 {
+  --color-background: 245, 231, 223;      /* Warm Pearl Beige */
+  --color-foreground: 32, 27, 25;         /* Charcoal */
+  --color-button: 214, 136, 124;          /* Dusty Coral */
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 214, 136, 124;
+  --gradient-background: #F5E7DF;
+}
+
+/* Footer / aqua band */
+.color-scheme-2 {
+  --color-background: 120, 170, 177;      /* Soft Aqua */
+  --color-foreground: 32, 27, 25;         /* charcoal, not white: 6.8:1 vs 2.6:1 */
+  --color-button: 32, 27, 25;
+  --color-button-text: 245, 231, 223;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 0, 0, 0;
+  --gradient-background: #78AAB1;
+}
+
+.color-scheme-3 {
+  --color-background: 227, 196, 188;      /* Soft Nude Beige */
+  --color-foreground: 32, 27, 25;
+  --color-button: 214, 136, 124;
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 214, 136, 124;
+  --gradient-background: #E3C4BC;
+}
+
+.color-scheme-4 {
+  --color-background: 236, 159, 147;      /* Signature Blush Pink */
+  --color-foreground: 32, 27, 25;
+  --color-button: 32, 27, 25;
+  --color-button-text: 245, 231, 223;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 32, 27, 25;
+  --gradient-background: #EC9F93;
+}
+
+.color-scheme-5,
+.color-scheme-6 {
+  --color-background: 32, 27, 25;         /* Charcoal */
+  --color-foreground: 245, 231, 223;
+  --color-button: 214, 136, 124;
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 245, 231, 223;
+  --color-link: 245, 231, 223;
+  --color-shadow: 0, 0, 0;
+  --gradient-background: #201B19;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+:root:not(.system-body-font) {
+  --font-body-family: 'Manrope', sans-serif;
+}
+:root:not(.system-header-font) {
+  --font-heading-family: 'Fraunces', serif;
+}
+
+/* NOTE: deliberately no `color` here. Dawn drives text colour per section
+   through --color-foreground (set by the .color-scheme-N class), so pinning
+   charcoal globally makes text invisible on every dark section — the footer,
+   dark hero overlays, scheme-2/5 bands. Set colour on components instead. */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* "Eyebrow" label style — echoes the tracked-caps "JEWELLERY" / tagline
+   treatment in the logo. Use on section kickers, category labels,
+   USP microcopy: <span class="mastt-eyebrow">New In</span> */
+.mastt-eyebrow {
+  font: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-aqua-dark);
+}
+
+/* Muted/secondary text utility */
+.mastt-text-muted { color: var(--color-charcoal-70); }
+
+
+/* --------------------------------------------------------------------------
+   4. BUTTONS
+   Unifies .button / .button--secondary / .button--tertiary AND the old
+   PDP-only override into one pill-shaped system.
+   -------------------------------------------------------------------------- */
+.button,
+.shopify-challenge__button,
+.customer button {
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-full);
+  padding: 0 3.2rem;
+  min-height: 4.8rem;
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal); /* WCAG contrast on coral: 6.75:1 — verified, do not swap to white */
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+.button:hover {
+  background-color: var(--color-coral-dark);
+  box-shadow: var(--shadow-coral-glow);
+  transform: translateY(-1px);
+}
+.button:active { transform: translateY(0); }
+
+.button--secondary {
+  background-color: transparent;
+  color: var(--color-charcoal);
+  border-color: var(--color-charcoal-15);
+}
+.button--secondary:hover {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-color: var(--color-charcoal);
+  box-shadow: var(--shadow-md);
+}
+
+.button--tertiary {
+  background-color: transparent;
+  color: var(--color-charcoal);
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-charcoal-45);
+  padding: 0;
+  min-height: auto;
+  min-width: auto;
+}
+.button--tertiary:hover { text-decoration-color: var(--color-charcoal); }
+
+/* On dark sections (footer, .color-scheme-2/5 dark schemes) flip the
+   ghost button so it stays legible */
+.color-background-1.color-scheme-2 .button--secondary,
+.color-background-1.color-scheme-5 .button--secondary {
+  color: var(--color-pearl-beige);
+  border-color: color-mix(in srgb, var(--color-pearl-beige) 30%, transparent);
+}
+
+
+/* --------------------------------------------------------------------------
+   5. FORM INPUTS
+   -------------------------------------------------------------------------- */
+.field__input,
+.select__select {
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body-family);
+  background-color: var(--color-white);
+}
+.field::before,
+.field::after,
+.select::before,
+.select::after {
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 0 0 1px var(--color-charcoal-15) !important;
+}
+.field__input:focus ~ .field__label,
+.field__input:not(:placeholder-shown) ~ .field__label {
+  color: var(--color-charcoal-70);
+}
+.field__input:focus,
+.select:focus-within {
+  outline: none;
+}
+.field__input:focus ~ .field__label ~ .field::after,
+.field:has(.field__input:focus)::after {
+  box-shadow: 0 0 0 2px var(--color-dusty-coral) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. PRODUCT CARD  (snippets/card-product.liquid, assets/component-card.css)
+   -------------------------------------------------------------------------- */
+/* ---- Card corners ----
+   This was a "petal": one oversized top-right radius, intended as the grid's
+   signature. Dropped in favour of four equal corners — with the ribbon, the
+   heart and the rating pill now on the card, an asymmetric frame read as a
+   rendering fault rather than a flourish. */
+.card-wrapper.product-card-wrapper .card {
+  --card-petal: var(--radius-md);
+
+  position: relative;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-white);
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              transform var(--duration-med) var(--ease-out);
+}
+
+.card-wrapper.product-card-wrapper:hover .card {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.card .card__inner .card__media,
+.card__media--placeholder {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  overflow: hidden;
+  background-color: var(--color-pearl-beige); /* image-loading placeholder tone */
+}
+
+/* Slower, softer image hover-zoom (was a quick scale(1.03)) */
+.card-wrapper:hover .media.media--hover-effect > img:only-child,
+.card-wrapper:hover .media.media--hover-effect > img:first-child:not(.motion-reduce) {
+  transform: scale(1.045);
+  transition: transform 480ms var(--ease-out);
+}
+
+/* ---- Price: flatten the old "chip inside a chip" (white bg + 20px
+   radius + 2px border) into type-led hierarchy — cleaner next to the
+   review badge ---- */
+.card-information .price__container {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+.card-information .price {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  color: var(--color-charcoal);
+}
+.card-information .price del,
+.card-information .price s {
+  color: var(--color-charcoal-45);
+}
+.card-information .price ins,
+.card-information .price .price-item--sale {
+  color: var(--color-coral-dark);
+  text-decoration: none;
+}
+
+.card__heading .full-unstyled-link {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  color: var(--color-charcoal);
+}
+
+/* ---- Card content order, per the approved card design ----
+   Liquid emits price → title → material pills. The design calls for
+   material eyebrow → title → price, so reorder with flex rather than
+   touching the template. */
+.card__content .card__information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.card__information .product__card-pills.pills-bottom { order: -2; }
+.card__information .card__heading { order: -1; margin: 0; }
+.card__information .price-with-rating { order: 0; }
+.card__information .card-information { order: 1; }
+
+/* Material line reads as a tracked eyebrow, not a chip, when it sits above
+   the title — matches the logo's own tracked-caps voice. The leading dot
+   borrows the separator from the logo's "LOOK GOOD • FEEL MASTT" tagline. */
+.card__information .pills-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card__information .pills-bottom .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  padding: 0;
+  color: var(--color-coral-dark);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wider);
+}
+
+.card__information .pills-bottom .pill::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-dusty-coral);
+  flex: none;
+}
+
+.card__information .pills-bottom .pill--metallic {
+  background: none;
+  animation: none;
+  color: var(--color-coral-dark);
+}
+
+/* ---- Pills (pack-size / discount / gender / material) ---- */
+.product__card-pills .pill {
+  border-radius: var(--radius-xs);
+  font: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0.3rem 0.9rem;
+  background: var(--color-charcoal-08);
+  color: var(--color-charcoal-70);
+  border: none;
+}
+.product__card-pills .pill--discount-1,
+.product__card-pills .pill--discount-2,
+.product__card-pills .pill--discount-3,
+.product__card-pills .pill--discount-4,
+.product__card-pills .pill--discount-5 {
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+}
+.product__card-pills .pill--metallic {
+  background: linear-gradient(120deg, var(--color-aqua-10), var(--color-white) 45%, var(--color-aqua-20));
+  color: var(--color-charcoal);
+  background-size: 200% 100%;
+  animation: mastt-shimmer 3.5s ease-in-out infinite;
+}
+@keyframes mastt-shimmer {
+  0%, 100% { background-position: 0% 0; }
+  50%      { background-position: 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product__card-pills .pill--metallic { animation: none; }
+}
+
+/* ---- Badges (sale / sold out) ---- */
+.card__badge .badge {
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- Quick add: floats over the bottom of the image on hover ----
+   The quick-add markup is a sibling of the media, so there's no media
+   element to anchor to. Instead it's pinned to the TOP edge of the text
+   block via `bottom: 100%`, which lands it over the bottom of the image
+   whatever the aspect ratio — and, unlike anchoring to .card-wrapper, it
+   can never cover the product title. */
+/* The quick-add markup now sits inside .card__inner (the media box), so it
+   anchors to the image itself. Earlier passes anchored it to .card__content
+   and it covered the product title. .card__inner already carries Dawn's
+   .ratio class (position: relative), so it is the containing block. */
+@media (min-width: 750px) {
+  .card-wrapper .card__inner > .quick-add {
+    position: absolute;
+    bottom: var(--space-3);
+    left: var(--space-3);
+    right: var(--space-3);
+    z-index: 4;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    /* opacity:0 alone still swallows clicks — without this the invisible
+       button covers the image and blocks the link to the product page. */
+    pointer-events: none;
+    transition: opacity var(--duration-med) var(--ease-out),
+                transform var(--duration-med) var(--ease-out);
+  }
+
+  .card-wrapper:hover .card__inner > .quick-add,
+  .card-wrapper:focus-within .card__inner > .quick-add {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+/* Touch: no hover, so pin it to the bottom of the image and keep it visible */
+@media (max-width: 749px) {
+  .card-wrapper .card__inner > .quick-add {
+    position: absolute;
+    bottom: var(--space-2);
+    left: var(--space-2);
+    right: var(--space-2);
+    z-index: 4;
+    margin: 0;
+  }
+}
+
+.card-wrapper .quick-add__submit {
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-charcoal);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-md);
+  min-height: 4.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.card-wrapper .quick-add__submit:hover {
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+}
+
+/* ---- Placeholder for products with no image yet ---- */
+.card__media--placeholder {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: linear-gradient(150deg,
+              var(--color-pearl-beige) 0%,
+              var(--color-nude-beige) 100%);
+}
+
+.card__media--placeholder .placeholder-svg {
+  width: 58%;
+  height: auto;
+  opacity: 0.32;
+  fill: var(--color-charcoal);
+}
+
+
+/* --------------------------------------------------------------------------
+   7. FAQ ACCORDION  (sections/collapsible-content.liquid)
+   Dawn's default is a flat hairline-divided list. This turns each row into
+   its own soft floating card with a coral accent that appears on the open
+   row — distinct from the generic accordion look, no markup changes needed.
+   -------------------------------------------------------------------------- */
+/* Single centred column, matching the approved reference. (An earlier pass
+   ran this two-up; the reference reads better because an open answer no
+   longer shunts the neighbouring column around.) */
+.collapsible-content__wrapper .grid__item {
+  display: block;
+  max-width: 104rem;
+  margin-inline: auto;
+}
+
+/* "SUPPORT" eyebrow above the heading */
+.collapsible-content .caption-with-letter-spacing {
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-aqua-dark);
+  margin-bottom: 0.6rem;
+}
+
+.collapsible-content .collapsible-content__heading {
+  text-align: center;
+  margin-bottom: clamp(28px, 20px + 2vw, 48px);
+}
+
+.collapsible-content .accordion {
+  margin-bottom: var(--space-4);
+
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-charcoal-08);
+  border-left: 4px solid transparent;
+  overflow: hidden;
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              border-color var(--duration-med) var(--ease-out);
+}
+.collapsible-content .accordion:last-child { margin-bottom: 0; }
+
+/* Open row earns the coral spine + a slightly lifted shadow */
+.collapsible-content .accordion:has(details[open]) {
+  box-shadow: var(--shadow-md);
+  border-left-color: var(--color-dusty-coral);
+}
+.collapsible-content .accordion summary {
+  padding: var(--space-4) var(--space-6);
+  cursor: pointer;
+  list-style: none;
+}
+.collapsible-content .accordion summary::-webkit-details-marker { display: none; }
+.collapsible-content .accordion__title {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  font-size: var(--text-base);
+}
+.collapsible-content .accordion summary svg,
+.collapsible-content .accordion summary .icon-caret {
+  transition: transform var(--duration-med) var(--ease-out);
+  color: var(--color-dusty-coral);
+}
+.collapsible-content .accordion details[open] summary svg,
+.collapsible-content .accordion details[open] summary .icon-caret {
+  transform: rotate(180deg);
+}
+.collapsible-content .accordion__content {
+  padding: 0 var(--space-6) var(--space-4);
+  color: var(--color-charcoal-70);
+}
+.collapsible-content .accordion__content a {
+  color: var(--color-coral-dark);
+}
+
+
+/* --------------------------------------------------------------------------
+   8. PROMOTIONAL BADGES  (snippets/product-badges.liquid)
+   Replaces the old image-based flap badges (hotlinked to Kekaa's CDN) with
+   solid on-brand fills — same categories/tags, no external images needed.
+   -------------------------------------------------------------------------- */
+.promotion__badge.bogo__badge        { background: var(--color-charcoal); color: var(--color-white); }
+.promotion__badge.hp__badge          { background: var(--color-coral-dark); color: var(--color-white); }
+.promotion__badge.twentyoff__badge   { background: var(--color-dusty-coral); color: var(--color-charcoal); }
+.promotion__badge.fiftyoff__badge    { background: var(--color-charcoal); color: var(--color-white); }
+.promotion__badge.new__badge         { background: var(--color-aqua); color: var(--color-charcoal); }
+.promotion__badge.exclusive__badge   { background: var(--color-charcoal); color: var(--color-pearl-beige); }
+.promotion__badge.themasttedit__badge{ background: var(--color-blush-pink); color: var(--color-charcoal); }
+.promotion__badge.artisan__badge     { background: var(--color-nude-beige); color: var(--color-charcoal); }
+
+
+/* --------------------------------------------------------------------------
+   8b. TESTIMONIALS  (sections/ss-testimonial-9.liquid)
+   Third-party section whose classes are all suffixed with the section id,
+   hence the attribute selectors. The section's own colour settings are set
+   in the template; this adds the structural personality the settings panel
+   can't express — a serif quote mark, an asymmetric card corner, and a
+   coral ring on the avatar so the reviewer reads as a person, not a chip.
+   -------------------------------------------------------------------------- */
+[class*="testimonials-slide-"] {
+  position: relative;
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 4px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-charcoal-08);
+  overflow: visible;
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              transform var(--duration-med) var(--ease-out);
+}
+
+[class*="testimonials-slide-"]:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Oversized quote mark, tucked behind the text */
+[class*="testimonials-slide-"]::before {
+  content: '\201C';
+  position: absolute;
+  top: -2px;
+  left: 14px;
+  z-index: 0;
+  font-family: var(--font-heading-family);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--color-dusty-coral);
+  opacity: .28;
+  pointer-events: none;
+}
+
+[class*="testimonials-slide-"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Product name → tracked caps, matching the eyebrow voice used elsewhere */
+[class*="testimonials-title-"] {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-size: 10.5px !important;
+  font-weight: 700;
+  color: var(--color-aqua-dark) !important;
+}
+
+[class*="testimonials-text-"] {
+  font-family: var(--font-body-family);
+}
+
+[class*="testimonials-author-"] {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+}
+
+[class*="testimonials-avatar-"] {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-dusty-coral);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Arrows: brand-tinted, circular, consistent with the UGC/review carousels */
+[class*="testimonials-btn-prev-"],
+[class*="testimonials-btn-next-"] {
+  border-radius: var(--radius-full);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+
+/* --------------------------------------------------------------------------
+   9. HEADER  (sections/header.liquid — styles live in base.css §header)
+   Nav links pick up the logo's own tracked-caps "JEWELLERY" treatment
+   instead of the serif heading face, with a coral underline that wipes in
+   from the left. Icons shift color rather than scaling (no layout jitter),
+   and the sticky bar gains a shadow only once it detaches from the top.
+   -------------------------------------------------------------------------- */
+.header-wrapper--border-bottom {
+  border-bottom: 1px solid var(--color-charcoal-08);
+}
+
+/* Narrower header than the 1400px page width — pulls the logo and nav in
+   from the edges so the bar reads as a contained element rather than a
+   full-bleed strip. Page content keeps the wider measure. */
+@media screen and (min-width: 990px) {
+  .header-wrapper .header.page-width {
+    max-width: 118rem;
+  }
+}
+
+/* ---- Wordmark ---- */
+.header__heading-link .h2,
+.header__heading .h2,
+.header__heading-link {
+  color: var(--color-blush-pink);
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  letter-spacing: 0.01em;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.header__heading-link:hover .h2,
+.header__heading-link:hover {
+  color: var(--color-dusty-coral);
+}
+
+/* SVG logo. The source canvas was 2102x1402 with the artwork occupying only
+   839x378 of it — mostly empty margin, which is why it rendered tiny. The
+   viewBox is now cropped to the artwork, so this width is the real mark. */
+.header__heading-logo-wrapper img[src$='.svg'],
+.header__heading-logo[src$='.svg'] {
+  width: clamp(132px, 104px + 5vw, 178px);
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
+/* Dawn adds .shopify-section-header-sticky once the header detaches */
+.shopify-section-header-sticky .header-wrapper {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--duration-med) var(--ease-out);
+}
+
+/* ---- Nav links ---- */
+.header__menu-item,
+.header__active-menu-item {
+  font-family: var(--font-body-family);
+  color: rgb(var(--color-foreground));
+}
+
+.header__inline-menu .header__menu-item {
+  position: relative;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 1.2rem 1.4rem;
+}
+
+/* Underline wipes in from the left. Scoped to the top row only — the markup
+   nests ul > li > [header-menu > details >] summary|a, so these paths pick
+   out the top-level items without reaching submenu rows. */
+.header__inline-menu > .list-menu--inline > li > a.header__menu-item::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details > .header__menu-item::after {
+  content: '';
+  position: absolute;
+  left: 1.4rem;
+  right: 1.4rem;
+  bottom: 0.6rem;
+  height: 1.5px;
+  background: var(--color-dusty-coral);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-med) var(--ease-out);
+}
+
+.header__inline-menu > .list-menu--inline > li > a.header__menu-item:hover::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details > .header__menu-item:hover::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details[open] > .header__menu-item::after {
+  transform: scaleX(1);
+}
+
+.header__inline-menu .header__menu-item:hover {
+  color: var(--color-charcoal);
+}
+
+/* No persistent marker on the current page — the hover underline already
+   reads clearly, and a static one on HOME looked like a stuck hover state. */
+.header__active-menu-item {
+  text-decoration: none;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Dropdown/submenu rows stay sentence-case and quieter than the top row */
+.header__submenu .header__menu-item {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--color-charcoal-70);
+}
+
+.header__submenu .header__menu-item:hover {
+  color: var(--color-charcoal);
+  background: var(--color-charcoal-08);
+}
+
+/* ---- Icons: color shift, not scale (scaling nudges neighbours) ---- */
+.header__icon .icon {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.header__icon:hover .icon,
+.modal__close-button:hover .icon {
+  transform: none;
+  color: var(--color-dusty-coral);
+}
+
+/* ---- Cart count bubble ---- */
+.cart-count-bubble {
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  font-weight: 700;
+  height: 1.8rem;
+  min-width: 1.8rem;
+  width: auto;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 2px var(--color-white);
+}
+
+
+/* --------------------------------------------------------------------------
+   10. FOOTER  (sections/footer.liquid, assets/section-footer.css)
+   Runs on the dark scheme (scheme-2) as the closing bookend to the pearl
+   hero. Dawn's own borders/text already derive from --color-foreground, so
+   they invert correctly — what needs help is the type treatment and the
+   link affordances, which were tuned for a light ground.
+   -------------------------------------------------------------------------- */
+/* Column headings: charcoal and bold. The footer runs on the aqua scheme,
+   where coral headings sat at only ~1.9:1 against the background — charcoal
+   on aqua is 6.8:1 and reads as deliberate rather than washed out. */
+.footer .footer-block__heading,
+.footer .footer-block__heading * {
+  font-family: var(--font-heading-family);
+  font-size: 1.9rem;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-charcoal);
+  opacity: 1;
+  margin-bottom: 1.4rem;
+}
+
+/* Link columns sit slightly under the headings */
+.footer .list-menu__item--link,
+.footer .copyright__content {
+  color: rgba(var(--color-foreground), 0.82);
+}
+
+/* Brand block (contact / GST / address) in white — it sits on the aqua
+   band and reads as supporting detail against the charcoal heading. */
+.footer .footer-block__brand-info,
+.footer .footer-block__brand-info p,
+.footer .footer-block__brand-info a,
+.footer .footer-block__brand-info strong {
+  color: var(--color-white);
+}
+
+.footer .footer-block__brand-info a:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Divider above the bottom bar + copyright/GST on one row */
+.footer .footer__content-bottom {
+  border-top: 1px solid rgba(var(--color-foreground), 0.14);
+  margin-top: clamp(24px, 16px + 2vw, 40px);
+  padding-top: clamp(18px, 12px + 1.4vw, 28px);
+}
+
+/* Menu + policy links: coral on hover (6.2:1 on charcoal), with an underline
+   so hover isn't signalled by colour alone */
+.footer .list-menu__item--link,
+.footer .footer__list-social a,
+.footer .policies a {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer .list-menu__item--link:hover,
+.footer .policies a:hover {
+  color: var(--color-dusty-coral);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Social icons: lift + tint rather than Dawn's default opacity shift */
+.footer .list-social__item .icon {
+  transition: color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.footer .list-social__link:hover .icon {
+  color: var(--color-dusty-coral);
+  transform: translateY(-2px);
+}
+
+/* Brand block: the GST/address paragraph is fine print, not body copy */
+.footer .footer-block__details-content {
+  font-size: 1.3rem;
+  line-height: 1.7;
+}
+
+.footer .copyright__content {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+/* Payment icons read as decorative here — keep them from dominating */
+.footer .list-payment__item svg {
+  opacity: 0.85;
+}
+
+
+/* --------------------------------------------------------------------------
+   11. PRODUCT PAGE + COLLECTION PAGE
+   -------------------------------------------------------------------------- */
+
+/* ---- Buy button hierarchy: Add to Cart is the coral primary, Buy it now
+   is charcoal. Shopify's dynamic checkout button ships its own teal, so it
+   needs an explicit override to join the system. ---- */
+.product-form__submit {
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+}
+
+.shopify-payment-button__button--unbranded,
+button.shopify-payment-button__button--unbranded {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-radius: var(--radius-full);
+  min-height: 4.8rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  box-shadow: none;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.shopify-payment-button__button--unbranded:hover,
+button.shopify-payment-button__button--unbranded:hover {
+  background-color: color-mix(in srgb, var(--color-charcoal) 88%, white);
+  transform: translateY(-1px);
+}
+
+.shopify-payment-button__more-options {
+  color: var(--color-charcoal-70);
+}
+
+/* ---- Variant pills ---- */
+.product-form__input--pill input[type='radio'] + label {
+  border-radius: var(--radius-full);
+  border-color: var(--color-charcoal-15);
+  font-family: var(--font-body-family);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.product-form__input--pill input[type='radio']:checked + label {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-color: var(--color-charcoal);
+}
+
+.product-form__input--pill input[type='radio']:hover + label {
+  border-color: var(--color-dusty-coral);
+}
+
+/* ---- PDP accordion rows (Product Details / Shipping / etc.) ---- */
+.product__accordion .accordion__title,
+.product .accordion__title {
+  font-family: var(--font-heading-family);
+}
+
+.product__accordion summary .svg-wrapper,
+.product .accordion summary .icon-caret {
+  color: var(--color-dusty-coral);
+}
+
+/* ---- Collection page: facet sidebar ---- */
+.facets__form .facets__summary,
+.facets__heading,
+.facets__summary {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.facets__price input,
+.facets-wrapper .field__input {
+  border-radius: var(--radius-sm);
+}
+
+.active-facets__button,
+.active-facets__button-remove {
+  border-radius: var(--radius-full);
+}
+
+/* Checkbox accent so filters read as brand, not browser-default blue */
+.facets input[type='checkbox'],
+.facets-wrapper input[type='checkbox'] {
+  accent-color: var(--color-dusty-coral);
+}
+
+/* Cards with no image yet shouldn't read as broken white boxes — give the
+   media well the brand tone so the grid still looks intentional. */
+.card__media,
+.card .media {
+  background-color: var(--color-pearl-beige);
+}
+
+.collection .loading-overlay__spinner path,
+.facets-container .loading-overlay__spinner path {
+  fill: var(--color-dusty-coral);
+}
+
+
+/* --------------------------------------------------------------------------
+   12. SECTION HEADINGS  (.kk__heading — shared by every custom homepage
+   section: Categories, Our Promise, Outfit-Style, Promo grid)
+   One editorial treatment applied everywhere, so the page reads as a single
+   composition rather than four sections that happen to sit together. The
+   rule beneath each heading carries the logo's dot separator at its centre.
+   -------------------------------------------------------------------------- */
+.kk__heading {
+  position: relative;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgb(var(--color-foreground));
+  padding-bottom: 1.8rem;
+}
+
+/* Hairline rule, split either side of a coral dot */
+.kk__heading::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0.4rem;
+  transform: translateX(-50%);
+  width: 8.4rem;
+  height: 5px;
+  background:
+    linear-gradient(var(--color-charcoal), var(--color-charcoal)) left center / calc(50% - 9px) 1px no-repeat,
+    linear-gradient(var(--color-charcoal), var(--color-charcoal)) right center / calc(50% - 9px) 1px no-repeat,
+    radial-gradient(circle, var(--color-dusty-coral) 2.5px, transparent 2.6px) center / 100% 100% no-repeat;
+}
+
+
+/* --------------------------------------------------------------------------
+   13. FOCUS STATES (accessibility — keep visible, on-brand)
+   -------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+.button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-dusty-coral);
+  outline-offset: 2px;
+}
+
+
+/* --------------------------------------------------------------------------
+   MOBILE HEADER — logo first, menu beside it, actions right
+   Dawn's .header--mobile-left only left-aligns the logo inside its grid
+   column, so it never reaches the edge. Keep the grid (an earlier flex
+   rewrite collapsed the logo, because base.css sizes the image through
+   .header__heading-logo-wrapper img and an auto width left it nothing to
+   resolve against) and just redefine the columns.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .header--mobile-left {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: none;
+    column-gap: 2px;
+    align-items: center;
+    padding-inline: 1.4rem;
+  }
+
+  .header--mobile-left .header__heading,
+  .header--mobile-left .header__heading-link {
+    text-align: left;
+    justify-self: start;
+    margin: 0;
+    padding-inline: 0;
+  }
+
+  /* Cap the height only. Width is owned by base.css so the logo keeps a
+     resolvable box. */
+  .header--mobile-left .header__heading-logo-wrapper img {
+    max-height: 32px;
+    width: auto;
+    max-width: 132px;
+    object-fit: contain;
+  }
+
+  .header--mobile-left .header__icons {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+  }
+
+  /* Dawn tags the account icon `small-hide` whenever a menu is set, on the
+     assumption that account links live in the drawer. We want it on the bar
+     next to search and cart, so opt back in. Deliberately not scoped to
+     .header--mobile-left: that class disappears the moment someone switches
+     the mobile logo position in Theme Editor, which is exactly how this
+     regressed once already. */
+  .header__icon--account.small-hide { display: flex !important; }
+
+  .header--mobile-left .header__icon,
+  .header--mobile-left .header__icon--menu,
+  .header--mobile-left .header__icon--cart {
+    width: 4.2rem;
+    height: 4.2rem;
+    margin: 0;
+  }
+
+  .header--mobile-left .header__icon svg { width: 2rem; height: 2rem; }
+}
+
+
+/* --------------------------------------------------------------------------
+   MOBILE HERO
+   Caption and CTA sit below the image (banner--mobile-bottom), so the image
+   gets a fixed portrait ratio rather than a viewport height — that is what
+   keeps the button on the first screen instead of pushing it under the fold.
+   Target ratio is 4:5; see the slide's mobile image setting.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .slideshow.banner .slideshow__media {
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+    height: auto;
+  }
+
+  .slideshow.banner .slideshow__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slideshow.banner .banner__content { padding: 0; }
+
+  .slideshow.banner .banner__box {
+    padding: 16px 1.5rem 4px;
+    text-align: center;
+  }
+
+  .slideshow.banner .banner__buttons {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .slideshow.banner .banner__buttons .button { width: 100%; }
+}
+
+
+/* --------------------------------------------------------------------------
+   PAGE GROUND
+   A single soft wash behind the homepage instead of flat beige. Fixed so it
+   does not travel with the scroll, and pinned to the top third, which is
+   where the arch of the hero sits.
+   -------------------------------------------------------------------------- */
+.template-index body,
+body.template-index {
+  background-color: var(--color-pearl-beige);
+}
+
+.template-index main {
+  position: relative;
+  isolation: isolate;
+}
+
+.template-index main::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% 0%,
+      color-mix(in srgb, var(--color-blush-pink) 22%, transparent) 0%,
+      transparent 62%),
+    radial-gradient(90% 50% at 85% 18%,
+      color-mix(in srgb, var(--color-aqua) 14%, transparent) 0%,
+      transparent 58%),
+    var(--color-pearl-beige);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .template-index main::before { position: absolute; }
+}
+
+
+/* --------------------------------------------------------------------------
+   SHOP BY CATEGORY — grounded panel
+   The tiles floated on the page ground with their captions loose underneath.
+   A single soft panel behind the whole section gathers image and label into
+   one object, and a faint gradient keeps it from reading as a hard box.
+   -------------------------------------------------------------------------- */
+.kk-collection-list {
+  position: relative;
+  isolation: isolate;
+}
+
+.kk-collection-list::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -6px -1.1rem 8px;
+  border-radius: var(--radius-lg, 24px);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-white) 82%, transparent) 0%,
+      color-mix(in srgb, var(--color-nude-beige) 26%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+}
+
+@media screen and (min-width: 750px) {
+  .kk-collection-list::before {
+    inset: -12px -24px 16px;
+  }
+}
+
+/* Each caption gets its own quiet chip so it reads as part of the tile
+   rather than text stranded on the panel. */
+.kk-collection-list .collection-list__label {
+  padding: 4px 8px;
+  border-radius: var(--radius-xs, 6px);
+  background: color-mix(in srgb, var(--color-white) 72%, transparent);
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT CARD — Mastt overlay
+   Ribbon, wishlist heart and rating pill sit on the image; the bundle line
+   sits under the price. Each piece renders only when its data exists, so a
+   product with no metafields is unchanged.
+   -------------------------------------------------------------------------- */
+.mcard__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;   /* the card link stays tappable underneath */
+}
+
+.mcard__overlay > * { pointer-events: auto; }
+
+/* Ribbon, top-left, notched into the image edge. */
+.mcard__ribbon {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  padding: 3px 10px 3px 8px;
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+/* Wishlist, top-right. */
+.mcard__wish {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-white) 88%, transparent);
+  color: var(--color-charcoal);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  transition: color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.mcard__wish-icon { width: 18px; height: 18px; display: block; }
+
+.mcard__wish.is-saved {
+  color: var(--color-dusty-coral);
+  background: var(--color-white);
+}
+
+.mcard__wish.is-saved .mcard__wish-icon path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.mcard__wish:focus-visible {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mcard__wish.is-popping { animation: mcard-pop 340ms var(--ease-out); }
+  @keyframes mcard-pop {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.28); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* Rating sits under the title, in the content flow. */
+.mcard__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mcard__star {
+  width: 11px;
+  height: 11px;
+  color: #F4AC03;   /* the one colour outside the palette: a gold star reads
+                       as a rating everywhere, a coral one reads as decoration */
+}
+
+.mcard__rating-count { color: var(--color-charcoal-45); font-weight: 500; }
+
+/* Bundle line, under the price. */
+.mcard__bundle {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0 0;
+  font-family: var(--font-body-family);
+  font-size: clamp(12px, 11px + 0.3vw, 14px);
+  line-height: 1.3;
+}
+
+.mcard__bundle-head {
+  font-weight: 700;
+  color: var(--color-aqua-dark);
+}
+
+.mcard__bundle-more { color: var(--color-charcoal-45); font-weight: 500; }
+
+.mcard__bundle-code {
+  padding: 1px 6px;
+  border: 1px dashed var(--color-charcoal-15);
+  border-radius: var(--radius-xs);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-charcoal-70);
+}
+
+
+/* --------------------------------------------------------------------------
+   QUICK ADD — a plus, level with the title
+   Dawn's quick-add carries two markup variants and two modals, so it is
+   restyled rather than rebuilt: the label text is hidden and a + drawn in
+   its place. The accessible name survives untouched, which a bare icon
+   button would have lost.
+   -------------------------------------------------------------------------- */
+/* The real quick-add is driven through the + beside the title, so it is
+   removed from the layout entirely. Kept in the DOM — hiding it rather than
+   deleting it is what lets the proxy click it. */
+.card .quick-add {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.card .quick-add .quick-add__submit,
+.card .quick-add .quick-add__submit.button--full-width {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0;              /* hides the label; ::before draws the glyph */
+  color: transparent;
+  background: var(--color-white);
+  border: 1px solid var(--color-charcoal-15);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.card .quick-add .quick-add__submit::before {
+  content: '+';
+  font-family: var(--font-body-family);
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--color-charcoal);
+}
+
+@media (hover: hover) {
+  .card .quick-add .quick-add__submit:hover {
+    background: var(--color-charcoal);
+    border-color: var(--color-charcoal);
+  }
+  .card .quick-add .quick-add__submit:hover::before { color: var(--color-pearl-beige); }
+}
+
+.card .quick-add .quick-add__submit:focus-visible {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+/* Hidden on phones: the tap target competes with the card link, and a
+   variant picker in a modal is a poor mobile flow. Tapping through to the
+   product page is the better path. */
+@media screen and (max-width: 749px) {
+  .card .quick-add { display: none; }
+}
+
+
+
+
+
+/* --------------------------------------------------------------------------
+   HEADER — wishlist icon and count
+   -------------------------------------------------------------------------- */
+.header__icon--wishlist { position: relative; }
+
+/* Selector deliberately carries .header__icon: base.css line 2551 sets
+   `.header__icon span { height: 100% }`, which stretched this badge to the
+   full 44px icon height while its width stayed 18px — the capsule shape.
+   That rule is (0,1,1); a bare .mastt-wish-count is (0,1,0) and loses. */
+.header__icon .mastt-wish-count,
+.mastt-wish-count {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  aspect-ratio: 1;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* Ten or more genuinely needs the extra width — a pill, deliberately. */
+.header__icon .mastt-wish-count.is-wide,
+.mastt-wish-count.is-wide {
+  width: auto;
+  aspect-ratio: auto;
+  min-width: 18px;
+  padding: 0 5px;
+}
+
+
+.mastt-wish-count[hidden] { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   CARD — title row, price, rating
+   -------------------------------------------------------------------------- */
+
+/* Price row: figures left, + pinned right. */
+.card-wrapper .price-with-rating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.card-wrapper .price-with-rating .price { flex: 1 1 auto; min-width: 0; }
+
+.card-wrapper .card__heading { margin: 0; }
+
+.mcard__add {
+  /* component-card.css line 349 stretches `.card__heading a::after` across the
+     whole card at z-index 1 to make it one big tap target. Without lifting the
+     + above that, every tap landed on the link overlay and navigated to the
+     product instead of adding — which is why rewriting the click handler
+     changed nothing: the handler was never reached. */
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-top: -2px;
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid var(--color-charcoal-15);
+  border-radius: 8px;
+  background: var(--color-white);
+  color: var(--color-charcoal);
+  font-family: var(--font-body-family);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .mcard__add:hover {
+    background: var(--color-charcoal);
+    border-color: var(--color-charcoal);
+    color: var(--color-pearl-beige);
+  }
+}
+
+.mcard__add:focus-visible {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+/* Price above the title, one line, sale price leading. */
+
+.card-wrapper .price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-wrapper .price__container,
+.card-wrapper .price__regular,
+.card-wrapper .price__sale {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.card-wrapper .price .price-item--regular {
+  color: var(--color-charcoal-45);
+  text-decoration: line-through;
+  font-size: 0.86em;
+}
+
+.card-wrapper .price .price-item--sale {
+  color: var(--color-charcoal);
+  font-weight: 700;
+}
+
+.card-wrapper .price .taxes { display: none; }
+
+/* Rating pill, bottom-right of the image. */
+.mcard__overlay .mcard__rating {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-white) 92%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .card-wrapper .price { flex-wrap: nowrap; gap: 5px; font-size: 13px; }
+  .card-wrapper .card__heading { font-size: 13px; }
+  .mcard__add { width: 27px; height: 27px; font-size: 17px; }
+}
+
+
+
+
+
+/* --------------------------------------------------------------------------
+   CARD FRAME — clip the photo to the card's corners
+   Dawn rounds .card and .card__inner but leaves the <img> square, so at the
+   top corners the photo sits proud of the frame it is supposed to be inside.
+   Clipping at every level costs nothing and fixes it whatever the radius
+   setting is.
+   -------------------------------------------------------------------------- */
+.card-wrapper .card__inner,
+.card-wrapper .card__media,
+.card-wrapper .card__media > .media {
+  overflow: hidden;
+}
+
+.card-wrapper .card__inner,
+.card-wrapper .card__media,
+.card-wrapper .card__media > .media {
+  border-radius: inherit;
+}
+
+.card-wrapper .card__media img,
+.card-wrapper .card__media > .media img {
+  border-radius: inherit;
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — Add to cart and Buy it now, side by side
+   Dawn stacks them full width, which puts the primary action a scroll away
+   from the price on a phone. Sharing one row keeps both on the first screen.
+   -------------------------------------------------------------------------- */
+.product-form__buttons {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.product-form__buttons > *,
+.product-form__buttons .product-form__submit,
+.product-form__buttons .shopify-payment-button {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.product-form__buttons .shopify-payment-button__button {
+  width: 100%;
+  min-height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.product-form__buttons .product-form__submit { margin-bottom: 0; }
+
+/* Below 380px the two labels cannot both fit; stacking beats truncating. */
+@media screen and (max-width: 379px) {
+  .product-form__buttons { flex-wrap: wrap; }
+  .product-form__buttons > * { flex: 1 1 100%; }
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — accordions open with a plus, not a chevron
+   Scoped to .product__accordion so the carets in navigation, facets and the
+   cart drawer are left alone.
+   -------------------------------------------------------------------------- */
+.product__accordion summary { position: relative; }
+
+.product__accordion summary .icon-caret,
+.product__accordion summary > svg {
+  opacity: 0;          /* keep the box so the row keeps its spacing */
+  pointer-events: none;
+}
+
+.product__accordion summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-body-family);
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-charcoal);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.product__accordion details[open] > summary::after {
+  content: '−';
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — share and save over the gallery
+   -------------------------------------------------------------------------- */
+.product__media-wrapper { position: relative; }
+
+.mpa {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.mpa__btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-white) 90%, transparent);
+  color: var(--color-charcoal);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  transition: color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.mpa__icon { width: 19px; height: 19px; display: block; }
+
+.mpa__btn.is-saved { color: var(--color-dusty-coral); background: var(--color-white); }
+.mpa__btn.is-saved .mcard__wish-icon path { fill: currentColor; stroke: currentColor; }
+
+.mpa__btn:focus-visible { outline: 2px solid var(--color-charcoal); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mpa__btn.is-popping { animation: mcard-pop 340ms var(--ease-out); }
+}
+
+.mpa__toast {
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+
+.mpa__toast[hidden] { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   CART — tiered savings bar
+   Reward above the node, threshold below it, both centred on the same
+   percentage so each tier reads as one vertical column instead of two rows
+   the eye has to pair up.
+   -------------------------------------------------------------------------- */
+.mtier {
+  position: relative;
+  margin: 0 0 18px;
+  padding: 13px 14px 12px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-white) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+}
+
+.mtier[hidden] { display: none; }
+
+.mtier__msg {
+  margin: 0 0 14px;
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-charcoal-70);
+}
+
+.mtier__msg strong { color: var(--color-charcoal); font-weight: 700; }
+
+/* Padding gives the outermost labels room to centre without spilling. */
+.mtier__scale { padding-inline: 30px; }
+
+.mtier__rail { position: relative; }
+
+.mtier__above,
+.mtier__below { position: relative; height: 16px; }
+.mtier__above { margin-bottom: 5px; }
+.mtier__below { margin-top: 5px; height: 14px; }
+
+.mtier__off,
+.mtier__min {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-body-family);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  transition: color 300ms var(--ease-out), opacity 300ms var(--ease-out);
+}
+
+.mtier__off {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-charcoal-45);
+}
+
+.mtier__off.is-on { color: var(--color-coral-dark); }
+
+.mtier__min {
+  font-size: 10.5px;
+  color: var(--color-charcoal-45);
+  opacity: 0.75;
+}
+
+.mtier__min.is-on { opacity: 1; color: var(--color-charcoal-70); }
+
+.mtier__track {
+  position: relative;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+}
+
+.mtier__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-dusty-coral));
+  transition: width 520ms var(--ease-out);
+}
+
+.mtier__nodes { position: absolute; inset: 0; }
+
+.mtier__node {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--color-white);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  transition: box-shadow 300ms var(--ease-out), background-color 300ms var(--ease-out);
+}
+
+.mtier__node.is-on {
+  background: var(--color-dusty-coral);
+  box-shadow: 0 0 0 2px var(--color-dusty-coral);
+}
+
+/* Burst arcs outward from the bar, so the celebration belongs to the thing
+   that was unlocked rather than raining from the top of the screen. */
+.mtier__burst {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.mtier__bit {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--hue, var(--color-dusty-coral));
+  animation: mtier-pop 900ms var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+  opacity: 0;
+}
+
+@keyframes mtier-pop {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.4); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mtier__fill { transition: none; }
+  .mtier__bit { display: none; }
+}
+
+
+/* --------------------------------------------------------------------------
+   CART DRAWER — product rails
+   The drawer is narrow, so both rails scroll horizontally at roughly two
+   cards wide. Sections cannot be rendered inside a snippet, so the drawer
+   gets its own compact rail markup rather than the homepage sections.
+   -------------------------------------------------------------------------- */
+.mcr { margin-top: 20px; }
+.mcr[hidden] { display: none; }
+
+.mcr__head {
+  margin: 0 0 10px;
+  font-family: var(--font-heading-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.mcr__rail {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.mcr__rail::-webkit-scrollbar { display: none; }
+
+.mcr__rail > li {
+  flex: 0 0 clamp(128px, 40%, 168px);
+  scroll-snap-align: start;
+}
+
+/* The drawer has no room for a quick-add overlay or a ribbon. */
+.mcr__rail .quick-add,
+.mcr__rail .mcard__ribbon { display: none; }
+.mcr__rail .card__heading { font-size: 12px; }
+.mcr__rail .price { font-size: 12px; }
+
+
+/* --------------------------------------------------------------------------
+   HOMEPAGE — sections meet edge to edge
+   The custom sections each carried padding-block: calc(--spacer / 2), which at
+   the top of that clamp was 48px above and below every one of them. Zeroed on
+   the homepage so the page reads as one continuous run; the sections keep
+   their own internal padding, so nothing collides.
+   -------------------------------------------------------------------------- */
+.template-index .shopify-section { margin-block: 0; }
+
+.template-index .mastt-top-styles,
+.template-index .mastt-recipient,
+.template-index .mastt-reviews,
+.template-index .mastt-recently-viewed,
+.template-index .mastt-loved,
+.template-index .kk-collection-list,
+.template-index .usp-wrapper {
+  padding-block: 0;
+}
+
+/* A little breathing room between headings and the section above, without
+   reintroducing the gap. */
+.template-index .shopify-section + .shopify-section { padding-top: 22px; }
+
+@media screen and (min-width: 750px) {
+  .template-index .shopify-section + .shopify-section { padding-top: 34px; }
+}
+
+
+/* --------------------------------------------------------------------------
+   SIDE MENU
+   Group rail on the left, that group's tiles on the right. Every panel is
+   rendered and toggled with the hidden attribute, so switching groups costs
+   no request and the menu is usable before any JS runs.
+   -------------------------------------------------------------------------- */
+/* Dawn positions and animates .menu-drawer itself via the .menu-opening
+   class on the details. We only paint it and size the inner columns — the
+   sliding is Dawn's, which is why it now works. */
+#menu-drawer.mmd {
+  background: var(--color-pearl-beige);
+  padding: 0;
+  border: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+
+.mmd__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* --- body: rail + panes --- */
+.mmd__body {
+  flex: 1 1 auto;
+  display: grid;
+  padding-top: 0;
+  grid-template-columns: 40% 1fr;
+  min-height: 0;
+}
+
+@media screen and (min-width: 600px) {
+  .mmd__body { grid-template-columns: 220px 1fr; }
+}
+
+.mmd__rail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  background: var(--color-white);
+  border-right: 1px solid var(--color-charcoal-08);
+  -webkit-overflow-scrolling: touch;
+}
+
+.mmd__tab {
+  /* A span, not a button — see the note in mastt-menu-drawer.liquid. */
+  display: flex;
+  user-select: none;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 17px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--color-charcoal-08);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  font-family: var(--font-body-family);
+  font-size: 15px;
+  color: var(--color-charcoal-70);
+  transition: background-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+/* The selected group is tinted rather than boxed, so the rail stays quiet
+   and the tiles keep the attention. */
+.mmd__tab:focus-visible { outline: 2px solid var(--color-charcoal); outline-offset: -3px; }
+
+.mmd__tab[aria-selected='true'] {
+  background: var(--color-pearl-beige);
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
+
+.mmd__out { width: 13px; height: 13px; flex: none; opacity: 0.55; }
+
+.mmd__panes { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px; }
+.mmd__pane[hidden] { display: none; }
+
+.mmd__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mmd__tile {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  text-decoration: none;
+  color: var(--color-charcoal);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Empty well until a collection image exists — a quiet placeholder reads as
+   "image pending", where a broken frame reads as a fault. */
+.mmd__well {
+  display: block;
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background:
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--color-nude-beige) 40%, var(--color-white)) 0%,
+      color-mix(in srgb, var(--color-pearl-beige) 80%, var(--color-white)) 100%);
+}
+
+.mmd__well img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mmd__label {
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.mmd__viewall {
+  display: block;
+  margin: 16px auto 4px;
+  width: fit-content;
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-family: var(--font-body-family);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+  text-decoration: none;
+}
+
+/* --- footer --- */
+.mmd__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 13px 14px;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-charcoal-08);
+}
+
+.mmd__foot a {
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  color: var(--color-charcoal-70);
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #menu-drawer.mmd { transition: none; }
+}
+
+
+/* --------------------------------------------------------------------------
+   RAILS — "See all" and "Clear" sit below the centred title
+   The heads are centred inside each section, where the id-based selectors
+   live. Overriding them from this stylesheet loses on specificity: an id plus
+   a class beats two classes, every time.
+   -------------------------------------------------------------------------- */
+.mastt-recently-viewed .mrv__clear { margin-top: 6px; }
+
+.mlv__viewall-link {
+  display: block;
+  width: fit-content;
+  margin: clamp(16px, 12px + 1vw, 26px) auto 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   SECTION HEADINGS — one size everywhere
+   .kk__heading carried the face and the rule but never a size, so each
+   section fell back to whatever h2 gave it and they all differed slightly.
+   -------------------------------------------------------------------------- */
+.kk__heading {
+  font-size: clamp(22px, 18px + 1.4vw, 32px) !important;
+  line-height: 1.15;
+  margin-top: 0;
+  text-wrap: balance;
+}
+
+
+/* --------------------------------------------------------------------------
+   CART PAGE
+   -------------------------------------------------------------------------- */
+.template-cart .cart__count {
+  font-family: var(--font-body-family);
+  font-size: 0.5em;
+  font-weight: 400;
+  color: var(--color-charcoal-45);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+/* Line totals on one line — the column is narrow and "Rs. 399.00" was
+   wrapping mid-figure. */
+.template-cart .cart-item__totals,
+.template-cart .cart-item__price-wrapper,
+.template-cart .cart-item__price-wrapper .price,
+.cart-drawer .cart-item__price-wrapper {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.template-cart .cart-item__price-wrapper .price { display: inline-flex; gap: 6px; }
+
+
+
+
+/* --------------------------------------------------------------------------
+   SIDE MENU — product panes
+   Four rows of two, matching the reference. Tiles are lightweight markup
+   rather than card-product: five panels of full cards would be forty product
+   cards rendered on every page load, for a drawer most visitors never open.
+   -------------------------------------------------------------------------- */
+.mmd__pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mmd__ptile {
+  display: grid;
+  gap: 5px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  text-decoration: none;
+  color: var(--color-charcoal);
+  box-shadow: var(--shadow-sm);
+}
+
+.mmd__pname {
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  line-height: 1.3;
+  /* Two lines then ellipsis: jewellery titles are long and a ragged third
+     line breaks the grid's rhythm. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mmd__pprice {
+  font-family: var(--font-body-family);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.mmd__empty {
+  grid-column: 1 / -1;
+  padding: 26px 12px;
+  text-align: center;
+  border: 1px dashed var(--color-charcoal-15);
+  border-radius: var(--radius-md);
+  color: var(--color-charcoal-70);
+  font-family: var(--font-body-family);
+  font-size: 12.5px;
+}
+
+
+/* --------------------------------------------------------------------------
+   CART — totals breakdown
+   Label left, figure right, aligned on a tabular column so the numbers stack
+   cleanly and a discount reads as subtraction rather than another price.
+   -------------------------------------------------------------------------- */
+.mtot { margin: 0 0 14px; padding: 0; display: grid; gap: 9px; }
+
+.mtot__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mtot__row dt,
+.mtot__row dd {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 14px;
+  color: var(--color-charcoal-70);
+}
+
+.mtot__row dd { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.mtot__row--save dt,
+.mtot__row--save dd { color: var(--color-aqua-dark); font-weight: 600; }
+
+.mtot__tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  background: var(--color-aqua-10);
+  border: 1px dashed var(--color-aqua);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.mtot__row--total {
+  margin-top: 3px;
+  padding-top: 11px;
+  border-top: 1px solid var(--color-charcoal-15);
+}
+
+.mtot__row--total dt,
+.mtot__row--total dd {
+  font-family: var(--font-heading-family);
+  font-size: clamp(16px, 14px + 0.6vw, 19px);
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+
+/* --------------------------------------------------------------------------
+   SIDE MENU — category tiles match the homepage
+   Same square well, same radius, same caption beneath, so a category reads
+   identically whether it is met on the homepage or in the menu.
+   -------------------------------------------------------------------------- */
+.mmd__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+.mmd__tile {
+  gap: 7px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+}
+
+.mmd__tile .mmd__well { border-radius: var(--radius-sm); }
+
+.mmd__label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+
+/* --------------------------------------------------------------------------
+   RAILS — first card must not be clipped
+   The rails bleed to the screen edge with a 1.5rem inner gutter. With
+   `mandatory` snapping the browser lands on the nearest snap point as soon as
+   the rail is laid out, which sits at the card edge and swallows that gutter —
+   so the first card arrived already cut. `proximity` only snaps once a real
+   scroll happens, and scroll-padding keeps the gutter reserved.
+   -------------------------------------------------------------------------- */
+.mlv__grid,
+.mts__grid,
+.mrv__grid,
+.mcr__rail {
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: 1.5rem;
+}
+
+
+/* --------------------------------------------------------------------------
+   CARD — the + confirms itself
+   -------------------------------------------------------------------------- */
+.mcard__add.is-done {
+  background: var(--color-aqua-dark);
+  border-color: var(--color-aqua-dark);
+  color: var(--color-white);
+}
+
+.mcard__add.is-failed {
+  background: var(--color-dusty-coral);
+  border-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+}
+
+.mcard__add[disabled] { cursor: default; }
+
+
+/* --------------------------------------------------------------------------
+   OFFERS STRIP
+   Slim chips that scroll sideways, used on both the cart and the product
+   page. Locked chips stay in the strip: the ladder above the current spend is
+   the reason to add another piece.
+   -------------------------------------------------------------------------- */
+.moff { margin: 0 0 18px; }
+
+.moff__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.moff__title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.moff__sub {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  color: var(--color-charcoal-45);
+}
+
+.moff__strip {
+  display: flex;
+  gap: 8px;
+  margin: 0 -1.5rem;
+  padding: 2px 1.5rem 4px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: 1.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.moff__strip::-webkit-scrollbar { display: none; }
+
+.moff__chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: grid;
+  gap: 1px;
+  padding: 8px 11px;
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  border: 1px dashed color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  min-width: 118px;
+}
+
+.moff__chip.is-applied {
+  border-style: solid;
+  border-color: var(--color-aqua-dark);
+  background: var(--color-aqua-10);
+}
+
+/* Dimmed, not greyed out — an incentive nobody can read is not an incentive. */
+.moff__chip.is-locked { opacity: 0.62; }
+
+.moff__amt {
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--color-charcoal);
+  white-space: nowrap;
+}
+
+.moff__chip.is-applied .moff__amt { color: var(--color-aqua-dark); }
+
+.moff__cond {
+  font-family: var(--font-body-family);
+  font-size: 10.5px;
+  color: var(--color-charcoal-45);
+  white-space: nowrap;
+}
+
+.moff__go {
+  margin-top: 5px;
+  padding: 4px 0;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.moff__badge {
+  margin-top: 5px;
+  padding: 4px 0;
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-aqua-dark);
+}
+
+.moff__badge--locked { color: var(--color-charcoal-45); font-weight: 600; }
+
+
+/* Action slot in an offer chip. Present on the cart, absent on the product
+   page — there the chip states the offer and the cart applies it. */
+.moff__action { display: block; }
+
+.moff__action .moff__go,
+.moff__action .moff__badge { display: block; margin-top: 5px; }
+
+/* Product page: no action row, so the chip closes up rather than leaving a
+   gap where a button would have been. */
+.template-product .moff__chip { padding-block: 9px; }
+
+
+/* Share button confirms the copy on itself as well as in the toast — on a
+   phone the toast can sit under a thumb. */
+.mpa__btn.is-copied {
+  background: var(--color-aqua-dark);
+  color: var(--color-white);
+}

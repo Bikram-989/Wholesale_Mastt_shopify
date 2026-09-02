@@ -1,0 +1,284 @@
+<style>
+.promo-grid {
+  display: grid;
+  gap: clamp(15px, 12px + 0.9375vw, 30px);
+  height: clamp(400px, 312px + 27.5vw, 840px);
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 55% 45%;
+  grid-template-areas:
+    "large top"
+    "large bottom";
+}
+
+.promo-card-large  { grid-area: large; }
+.promo-card-top    { grid-area: top; }
+.promo-card-bottom { grid-area: bottom; }
+
+.promo-card {
+  position: relative;
+  border-radius: var(--radius-lg, 24px);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, var(--kk__cs));
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--color-pearl-beige, #F5E7DF);
+  background-size: cover;
+  background-position: center;
+  text-decoration: none;
+  transition: box-shadow 380ms cubic-bezier(.16,1,.3,1),
+              transform 380ms cubic-bezier(.16,1,.3,1),
+              background-size 600ms cubic-bezier(.16,1,.3,1);
+}
+
+.promo-card:hover {
+  box-shadow: var(--shadow-lg, 0 20px 48px -8px rgba(32,27,25,.22));
+  transform: translateY(-4px);
+  background-size: 112%;
+}
+
+.promo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(165deg, rgba(32, 27, 25, .06) 0%, rgba(32, 27, 25, .42) 100%);
+}
+
+.promo-content {
+  --inset__amount: clamp(15px, 12px + 0.9375vw, 30px);
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: calc(100% - 3rem);
+  color: #fff;
+
+  & * {
+    line-height: 1.2em;
+  }
+
+  span{
+    display: grid;
+    gap: 10px;
+  }
+}
+
+/* Generate placement classes */
+{% assign positions = "top-left top-center top-right center-left center-center center-right bottom-left bottom-center bottom-right" | split: " " %}
+{% for pos in positions %}
+  {% assign coords = pos | split: "-" %}
+.promo-content.pos-{{ pos }} {
+  {% if coords[0] == "top" %}
+    top: var(--inset__amount);
+  {% elsif coords[0] == "center" %}
+    top: 50%; transform: translateY(-50%);
+  {% else %}
+    bottom: var(--inset__amount);
+  {% endif %}
+
+  {% if coords[1] == "left" %}
+    left: var(--inset__amount);
+  {% elsif coords[1] == "center" %}
+    left: 50%; transform: translateX(-50%);
+  {% else %}
+    right: var(--inset__amount);
+  {% endif %}
+}
+{% endfor %}
+
+.promo-content.align-left   { align-items: flex-start; text-align: left; }
+.promo-content.align-center { align-items: center;       text-align: center; }
+.promo-content.align-right  { align-items: flex-end;    text-align: right; }
+
+.promo-content h2 { font-size: calc(clamp(22px, 19.2308px + 0.7692vw, 34px) * 1.25); }
+.promo-content h3 { font-size: clamp(22px, 19.2308px + 0.7692vw, 34px); }
+
+.promo-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  max-width: fit-content;
+  background: var(--color-dusty-coral, #D6887C);
+  padding: 5px 12px;
+  border-radius: var(--radius-full, 999px);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-charcoal, #201B19);
+  line-height: var(--line-height-x);
+  border: none;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(32,27,25,.12));
+}
+
+.promo-title {
+  max-width: 14ch;
+  color: white;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 500;
+  text-shadow: 0 2px 12px rgba(32, 27, 25, .5);
+}
+
+@media (max-width: 1120px) {
+  .promo-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: unset;
+    grid-template-areas: "large top bottom";
+    height: unset;
+  }
+  .promo-card { min-height: 300px; }
+}
+
+@media (max-width: 960px) {
+  .promo-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas:
+      "large"
+      "top"
+      "bottom";
+  }
+}
+</style>
+
+<section class="promo-section kk__wrapper">
+  <div class="promo-grid">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="promo-card promo-card-{{ block.type }}" style="background-image: url({{ block.settings.image | img_url: '800x' }});">
+        {% assign p = block.settings.content_placement | split: '-' %}
+        <div class="promo-content pos-{{ p[0] }}-{{ p[1] }} {% if p[1] == 'left' %}align-left{% elsif p[1] == 'center' %}align-center{% else %}align-right{% endif %}">
+          {% capture badge_html %}
+            {% if block.settings.badge_text != blank %}
+            <div class="promo-badge">
+              {% if block.settings.badge_icon %}
+                <img src="{{ block.settings.badge_icon | img_url: '20x' }}" alt="" />
+              {% endif %}
+              {{ block.settings.badge_text }}
+            </div>
+            {% endif %}
+          {% endcapture %}
+
+          {% if block.settings.badge_position == 'before' and block.settings.badge_text != blank %}
+            {{ badge_html }}
+          {% endif %}
+
+          {% if block.type == 'large' %}
+            <h2 class="promo-title">{{ block.settings.title }}</h2>
+          {% elsif block.type == 'bottom' %}
+            <h3 class="promo-title">{{ block.settings.title }}</h3>
+            <p class="promo-subtext">{{ block.settings.subtext }}</p>
+            <span>Coupon Code: <div class="promo-badge"><strong>{{ block.settings.coupon }}</strong></div></span>
+          {% else %}
+            <h3 class="promo-title">{{ block.settings.title }}</h3>
+          {% endif %}
+
+          {% if block.settings.badge_position == 'after' and block.settings.badge_text != blank %}
+            {{ badge_html }}
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo Cards Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "large",
+      "name": "Large Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text",   "default": "SUMMER SALE" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title",       "label": "Title" },
+        { "type": "select",       "id": "content_placement", "label": "Content Placement", "options": [
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default": "top-left" }
+      ]
+    },
+    {
+      "type": "top",
+      "name": "Top Right Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title","label": "Title" },
+        { "type": "select",       "id": "content_placement","label":"Content Placement","options":[
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default":"top-left" }
+      ]
+    },
+    {
+      "type": "bottom",
+      "name": "Bottom Right Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title","label": "Title" },
+        { "type": "text",         "id": "subtext","label": "Subtext","default":"Only for First 10 Customers"},
+        { "type": "text",         "id": "coupon","label": "Coupon Code","default":"MakeMeRare"},
+        { "type": "select",       "id": "content_placement","label":"Content Placement","options":[
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default":"bottom-left" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Promo Cards Grid", "blocks": [
+        { "type": "large" },
+        { "type": "top" },
+        { "type": "bottom" }
+    ] }
+  ]
+}
+{% endschema %}
