@@ -15,8 +15,6 @@
         "slide_qegYQT": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mastt_svg_banner_1.svg",
-            "image_mobile": "shopify://shop_images/SVG-1.svg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -35,8 +33,6 @@
         "slide_7Bkp4z": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mastt_svg_banner_2.svg",
-            "image_mobile": "shopify://shop_images/SVG-3.svg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -55,8 +51,6 @@
         "slide_B8W9Vz": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mastt_svg_banner_3.svg",
-            "image_mobile": "shopify://shop_images/SVG-4.svg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -75,8 +69,6 @@
         "slide_LbjdL3": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mastt_svg_banner_4.svg",
-            "image_mobile": "shopify://shop_images/SVG-5.svg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -95,8 +87,6 @@
         "slide_hH9zBP": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mastt_svg_banner_5.svg",
-            "image_mobile": "shopify://shop_images/SVG-2.svg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -142,7 +132,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Ring",
-            "image": "shopify://shop_images/OTH_R_F_0013.jpg",
             "custom_title": "Rings"
           }
         },
@@ -150,7 +139,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Necklace",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-18_at_4.48.34_PM.jpg",
             "custom_title": "Necklaces"
           }
         },
@@ -158,7 +146,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Bracelet",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_12.53.22_PM.jpg",
             "custom_title": "Bracelets"
           }
         },
@@ -166,7 +153,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Earring",
-            "image": "shopify://shop_images/OTH_E_F_0069.jpg",
             "custom_title": "Earrings"
           }
         },
@@ -174,7 +160,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Set",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.12.04_PM.jpg",
             "custom_title": "Sets"
           }
         },
@@ -182,7 +167,6 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=men",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.42.23_PM.jpg",
             "custom_title": "Mens"
           }
         }
@@ -450,7 +434,6 @@
           "settings": {
             "stars": 5,
             "quote": "Bought the hammered cuff for my sister's birthday and ended up ordering one for myself. The weight feels proper, not hollow like the stuff I've bought online before.",
-            "photo": "shopify://shop_images/IMG_8143.png",
             "author": "Ananya Sharma",
             "product": "Bengaluru",
             "verified": true
@@ -461,7 +444,6 @@
           "settings": {
             "stars": 5,
             "quote": "Wore the rope chain daily through a Chennai summer — gym, commute, everything. Zero fading, zero green marks on my neck. Genuinely impressed.",
-            "photo": "shopify://shop_images/IMG_8163.png",
             "author": "Rohit Menon",
             "product": "Chennai",
             "verified": true
@@ -472,7 +454,6 @@
           "settings": {
             "stars": 4,
             "quote": "Delivery took a day longer than promised but the packaging made up for it. The ring is exactly the shade shown in the photos, which honestly never happens.",
-            "photo": "shopify://shop_images/IMG_8159.png",
             "author": "Priya Deshmukh",
             "product": "Pune",
             "verified": true
@@ -483,7 +464,6 @@
           "settings": {
             "stars": 5,
             "quote": "My skin reacts to almost every metal, so I was sceptical. Three weeks in with the pendant and not a single itch. That alone is worth it.",
-            "photo": "shopify://shop_images/IMG_8158.png",
             "author": "Sneha Iyer",
             "product": "Kochi",
             "verified": true
@@ -494,7 +474,6 @@
           "settings": {
             "stars": 5,
             "quote": "Gifted the woven bracelet to my father on Diwali. He's not a jewellery person and he hasn't taken it off since. Solid clasp, no rattling.",
-            "photo": "shopify://shop_images/IMG_8163.png",
             "author": "Karan Gupta",
             "product": "Delhi",
             "verified": true
@@ -505,7 +484,6 @@
           "settings": {
             "stars": 4,
             "quote": "Good value for what you pay. Wish there were more designs for men, but the two I ordered have held up well over a couple of months.",
-            "photo": "shopify://shop_images/IMG_8161.png",
             "author": "Aditya Rao",
             "product": "Hyderabad",
             "verified": true
@@ -531,7 +509,6 @@
         "r1": {
           "type": "recipient",
           "settings": {
-            "image": "shopify://shop_images/IMG_8147_f3225381-75e7-4307-9c38-a5649415436a.png",
             "label_light": "Gifts For",
             "label_strong": "Her",
             "link": "/collections/all?filter.p.tag=women"
@@ -540,7 +517,6 @@
         "r2": {
           "type": "recipient",
           "settings": {
-            "image": "shopify://shop_images/IMG_8155.png",
             "label_light": "Gifts For",
             "label_strong": "Him",
             "link": "/collections/all?filter.p.tag=men"
@@ -791,7 +767,7 @@
         "heading_text": "Outfit-Style Collections"
       }
     },
-"1745938145f3ffcbff": {
+    "1745938145f3ffcbff": {
       "type": "apps",
       "disabled": true,
       "settings": {
