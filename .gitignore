@@ -5,3 +5,10 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Shopify Functions app (wholesale-order-minimum-app/)
+node_modules/
+dist/
+.shopify/
+generated/
+*.wasm

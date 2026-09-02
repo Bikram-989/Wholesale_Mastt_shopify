@@ -264,6 +264,7 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'mastt-redesign.css' | asset_url | stylesheet_tag }}
+    {{ 'wholesale-minimum.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -385,7 +386,6 @@
     <script src="{{ 'mastt-wishlist.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'mastt-card.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'mastt-share.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'mastt-cart-tiers.js' | asset_url }}" defer="defer"></script>
 
     {%- comment -%}
       Recently Viewed recorder. Writes the current product's handle to the

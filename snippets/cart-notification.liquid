@@ -43,11 +43,14 @@
         >
           {{- 'general.cart.view_empty_cart' | t -}}
         </a>
-        <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width" name="checkout">
-            {{ 'sections.cart.checkout' | t }}
-          </button>
-        </form>
+        {%- comment -%}
+          Retail offered checkout straight from this popup. Wholesale cannot:
+          the notification is rendered with the header, so its copy of `cart`
+          predates the item just added and any minimum test here would be
+          wrong by exactly that item. Sending the buyer to the cart — where
+          the total is real and the gate is accurate — is the honest move, and
+          it costs a wholesale buyer assembling a large order nothing.
+        {%- endcomment -%}
         <button type="button" class="link button-label">{{ 'general.continue_shopping' | t }}</button>
       </div>
     </div>

@@ -1,0 +1,23 @@
+# Generated fields (`uid`, and `client_id` in ../shopify.app.toml) are written
+# by the Shopify CLI on your first `shopify app deploy`. Leave them absent.
+
+api_version = "2025-10"
+
+[[extensions]]
+name = "Wholesale order minimum"
+handle = "order-minimum"
+type = "function"
+description = "Blocks checkout below the wholesale.mastt.co order minimum."
+
+  [[extensions.targeting]]
+  target = "cart.validations.generate.run"
+  input_query = "src/cart_validations_generate_run.graphql"
+  export = "cartValidationsGenerateRun"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+  watch = [ "src/**/*.js", "src/**/*.graphql" ]
+
+[access_scopes]
+scopes = ""

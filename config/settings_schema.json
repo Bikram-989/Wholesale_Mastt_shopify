@@ -1453,24 +1453,18 @@
     ]
   },
   {
-    "name": "Cart savings tiers",
+    "name": "Wholesale",
     "settings": [
       {
         "type": "paragraph",
-        "content": "This bar shows progress toward a saving. It does NOT apply the discount — Shopify allows only one order-class automatic discount per order, so overlapping tiers cannot be trusted to resolve correctly. Mirror these thresholds with a discount that actually applies at checkout, or the cart promises money it will not deliver."
+        "content": "The order minimum is enforced in two places and they must agree. This setting governs only what the cart shows and whether the theme's checkout button is clickable. The binding check — the one that also covers Shop Pay, Google Pay and Apple Pay — is the Cart and Checkout Validation function in wholesale-order-minimum-app. Change the number here and you must change MINIMUM_SUBTOTAL in that function and redeploy it, or the cart and the checkout will disagree about the same order."
       },
       {
-        "type": "textarea",
-        "id": "cart_tiers_json",
-        "label": "Tiers (JSON)",
-        "default": "[{\"min\":99900,\"off\":10000},{\"min\":159900,\"off\":20000},{\"min\":209900,\"off\":30000}]",
-        "info": "Array of {\"min\": <cart total in paise>, \"off\": <saving in paise>}. 99900 = ₹999."
-      },
-      {
-        "type": "checkbox",
-        "id": "cart_tiers_enabled",
-        "label": "Show the savings bar",
-        "default": true
+        "type": "number",
+        "id": "wholesale_min_order",
+        "label": "Minimum order value (in paise)",
+        "default": 300000,
+        "info": "300000 = ₹3,000. Shopify stores money as integers, so append two zeros to the rupee figure. Setting 0 lifts the minimum in the theme only — the validation function has to be deactivated separately."
       },
       {
         "type": "collection",

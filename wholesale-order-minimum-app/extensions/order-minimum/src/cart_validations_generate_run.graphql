@@ -1,0 +1,12 @@
+query CartValidationsGenerateRunInput {
+  buyerJourney {
+    step
+  }
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+      }
+    }
+  }
+}

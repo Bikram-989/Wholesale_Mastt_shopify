@@ -87,10 +87,6 @@
         >
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
-              {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-                {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'drawer' -%}
-              {%- endif -%}
-
               <div class="drawer__cart-items-wrapper">
                 <table class="cart-items" role="table">
                   <thead role="rowgroup">
@@ -544,6 +540,16 @@
           </small>
         </div>
 
+        {%- liquid
+          assign wmin = settings.wholesale_min_order | default: 300000
+          assign below_min = false
+          if wmin > 0 and cart.total_price < wmin
+            assign below_min = true
+          endif
+        -%}
+
+        {%- render 'wholesale-min-notice', context: 'drawer' -%}
+
         <!-- CTAs -->
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <button
@@ -552,7 +558,7 @@
             class="cart__checkout-button button"
             name="checkout"
             form="CartDrawer-Form"
-            {% if cart == empty %}
+            {% if cart == empty or below_min %}
               disabled
             {% endif %}
           >

@@ -1,0 +1,10 @@
+{
+  "name": "wholesale-order-minimum-app",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "deploy": "shopify app deploy",
+    "dev": "shopify app dev"
+  }
+}

@@ -791,52 +791,7 @@
         "heading_text": "Outfit-Style Collections"
       }
     },
-    "kekaa_promo_section_D4MDGC": {
-      "type": "kekaa__promo__section",
-      "blocks": {
-        "large_Trttyk": {
-          "type": "large",
-          "settings": {
-            "link": "shopify://collections",
-            "badge_text": "New Year Sale",
-            "badge_position": "before",
-            "title": "<p>Buy1 get 1 FREE</p>",
-            "content_placement": "top-left"
-          }
-        },
-        "top_AJrHTn": {
-          "type": "top",
-          "settings": {
-            "link": "",
-            "badge_text": "Stay tuned",
-            "badge_position": "after",
-            "title": "<p>Mastt Pass:<br/>Exclusive Club</p>",
-            "content_placement": "bottom-left"
-          }
-        },
-        "bottom_LYtAC4": {
-          "type": "bottom",
-          "settings": {
-            "link": "",
-            "badge_text": "",
-            "badge_position": "after",
-            "title": "<p>Hidden Discount</p>",
-            "subtext": "Only for First 10 Customers",
-            "coupon": "MakeMeRare",
-            "content_placement": "top-right"
-          }
-        }
-      },
-      "block_order": [
-        "large_Trttyk",
-        "top_AJrHTn",
-        "bottom_LYtAC4"
-      ],
-      "disabled": true,
-      "name": "Promo Cards Grid",
-      "settings": {}
-    },
-    "1745938145f3ffcbff": {
+"1745938145f3ffcbff": {
       "type": "apps",
       "disabled": true,
       "settings": {
@@ -865,7 +820,6 @@
     "collapsible_content_pDahx6",
     "featured_collection",
     "kekaa_style_collection_mgQ4zd",
-    "kekaa_promo_section_D4MDGC",
     "1745938145f3ffcbff",
     "175221991594959e7c"
   ]

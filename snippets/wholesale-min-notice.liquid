@@ -1,0 +1,50 @@
+{%- comment -%}
+  Wholesale order-minimum notice.
+
+  Wholesale only accepts orders at or above the minimum, so the cart has to
+  say so before the customer reaches a dead checkout button and wonders what
+  they did wrong. The shortfall is stated as money rather than a percentage:
+  "Add ₹1,240 to check out" is an instruction, "62% of minimum" is a puzzle.
+
+  IMPORTANT — this is presentation only. It disables nothing on its own, and
+  the express checkout buttons (Shop Pay, Google Pay, Apple Pay) never render
+  this template at all. The binding check is the Cart and Checkout Validation
+  function in wholesale-order-minimum-app/. If you change the threshold in
+  theme settings you MUST change MINIMUM_SUBTOTAL in that function too, or
+  the cart and the checkout will disagree about the same order.
+
+  Accepts:
+  - context: {String} 'drawer' or 'page', for styling only
+{%- endcomment -%}
+
+{%- liquid
+  assign wmin = settings.wholesale_min_order | default: 300000
+  assign show_notice = false
+
+  if cart.item_count > 0 and wmin > 0
+    assign show_notice = true
+    assign shortfall = wmin | minus: cart.total_price
+    assign pct = cart.total_price | times: 100 | divided_by: wmin
+    if pct > 100
+      assign pct = 100
+    endif
+    assign min_label = wmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+    assign short_label = shortfall | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+  endif
+-%}
+
+{%- if show_notice -%}
+  <div class="wmin wmin--{{ context | default: 'page' }}{% if shortfall <= 0 %} wmin--met{% endif %}">
+    <p class="wmin__msg" aria-live="polite">
+      {%- if shortfall > 0 -%}
+        Add <strong>{{ short_label }}</strong> to reach the {{ min_label }} wholesale minimum.
+      {%- else -%}
+        Minimum order of {{ min_label }} met.
+      {%- endif -%}
+    </p>
+
+    <div class="wmin__track" aria-hidden="true">
+      <span class="wmin__fill" style="width: {{ pct }}%"></span>
+    </div>
+  </div>
+{%- endif -%}

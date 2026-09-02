@@ -1,0 +1,23 @@
+# Function-only app for wholesale.mastt.co.
+#
+# It has no UI and no server: the whole app is one Wasm function that Shopify
+# runs during checkout. Nothing here needs hosting, which is why the minimum
+# can be enforced on a Basic plan.
+#
+# `client_id` is written here by the Shopify CLI the first time you run
+# `shopify app deploy` and pick or create the app. Do not invent one.
+
+name = "wholesale-order-minimum"
+application_url = "https://wholesale.mastt.co"
+embedded = false
+
+[access_scopes]
+# The function needs no Admin API access: it reads only the cart Shopify hands
+# it, and the validation is switched on by hand in Settings > Checkout.
+scopes = ""
+
+[webhooks]
+api_version = "2025-10"
+
+[build]
+include_config_on_deploy = true

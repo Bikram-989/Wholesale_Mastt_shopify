@@ -1,0 +1,83 @@
+/*
+ * Wholesale order-minimum notice.
+ *
+ * Deliberately borrows the card treatment the retail savings bar used, so the
+ * cart keeps the same rhythm: one soft panel above the checkout button. The
+ * fill gradient runs aqua to coral only while the minimum is unmet — once it
+ * is met the bar goes solid aqua, because a gradient that never completes
+ * reads as "still loading" rather than "done".
+ */
+
+.wmin {
+  position: relative;
+  margin: 0 0 18px;
+  padding: 13px 14px 12px;
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, var(--color-white, #fff) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal, #333) 8%, transparent);
+}
+
+.wmin__msg {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.wmin__msg strong {
+  font-weight: 600;
+  color: rgb(var(--color-foreground));
+}
+
+.wmin--met .wmin__msg {
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.wmin__track {
+  position: relative;
+  height: 7px;
+  border-radius: var(--radius-full, 999px);
+  background: color-mix(in srgb, var(--color-charcoal, #333) 10%, transparent);
+  overflow: hidden;
+}
+
+.wmin__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-full, 999px);
+  background: linear-gradient(
+    90deg,
+    var(--color-aqua, #4fb3bf),
+    var(--color-dusty-coral, #e08a7d)
+  );
+  transition: width 520ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.wmin--met .wmin__fill {
+  background: var(--color-aqua, #4fb3bf);
+}
+
+/* The drawer is a narrower column than the cart page, so the panel tightens
+   up rather than keeping page-sized padding in a 400px rail. */
+.wmin--drawer {
+  margin-bottom: 14px;
+  padding: 11px 12px 10px;
+}
+
+.wmin--drawer .wmin__msg {
+  font-size: 1.2rem;
+}
+
+/* A disabled checkout button still looks clickable in Dawn on some colour
+   schemes; make the blocked state unmistakable. */
+.cart__checkout-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wmin__fill {
+    transition: none;
+  }
+}

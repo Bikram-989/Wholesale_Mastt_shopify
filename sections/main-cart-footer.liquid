@@ -136,13 +136,23 @@
                 </small>
               </div>
             {%- else -%}
+              {%- liquid
+                assign wmin = settings.wholesale_min_order | default: 300000
+                assign below_min = false
+                if wmin > 0 and cart.total_price < wmin
+                  assign below_min = true
+                endif
+              -%}
+
+              {%- render 'wholesale-min-notice', context: 'page' -%}
+
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
                   type="submit"
                   id="checkout"
                   class="cart__checkout-button button"
                   name="checkout"
-                  {% if cart == empty %}
+                  {% if cart == empty or below_min %}
                     disabled
                   {% endif %}
                   form="cart"
@@ -151,7 +161,15 @@
                 </button>
               </div>
 
-              {%- if additional_checkout_buttons -%}
+              {%- comment -%}
+                Express checkout buttons are hidden, not disabled, below the
+                minimum. Shop Pay and Google Pay render inside Shopify's own
+                iframe and take no disabled attribute from us, so leaving them
+                on screen would offer a route the validation function is about
+                to reject — a rejection the customer would meet only after
+                authenticating with their wallet.
+              {%- endcomment -%}
+              {%- if additional_checkout_buttons and below_min == false -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
                   {{ content_for_additional_checkout_buttons }}
                 </div>

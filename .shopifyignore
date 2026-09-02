@@ -1,0 +1,3 @@
+# Not part of the Shopify theme — the order-minimum Function app lives here
+# and is deployed with `shopify app deploy`, never uploaded with the theme.
+wholesale-order-minimum-app/

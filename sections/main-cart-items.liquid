@@ -25,10 +25,6 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
-{%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-  {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
-{%- endif -%}
-
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     {%- comment -%}
@@ -461,16 +457,6 @@
       </p>
     </form>
   </div>
-  {%- comment -%}
-    Offers sit under the products and above the suggestions rail, so the
-    sequence reads: what you are buying, what you can save, what else you
-    might want, what it costs.
-  {%- endcomment -%}
-  {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-    <div class="page-width">
-      {%- render 'mastt-cart-offers', tiers_json: settings.cart_tiers_json -%}
-    </div>
-  {%- endif -%}
 </cart-items>
 
 {% schema %}
