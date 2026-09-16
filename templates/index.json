@@ -15,6 +15,7 @@
         "slide_qegYQT": {
           "type": "slide",
           "settings": {
+            "image_mobile": "shopify://shop_images/Final_2_Wholesale_pages-to-jpg-0003.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -33,6 +34,7 @@
         "slide_7Bkp4z": {
           "type": "slide",
           "settings": {
+            "image_mobile": "shopify://shop_images/Final_2_Wholesale_pages-to-jpg-0001.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -87,6 +89,7 @@
         "slide_hH9zBP": {
           "type": "slide",
           "settings": {
+            "image_mobile": "shopify://shop_images/Mastt_Mix_page-0004.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -116,7 +119,7 @@
       "name": "t:sections.slideshow.presets.name",
       "settings": {
         "layout": "grid",
-        "slide_height": "adapt_image",
+        "slide_height": "large",
         "slider_visual": "dots",
         "auto_rotate": true,
         "change_slides_speed": 5,
